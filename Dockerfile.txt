@@ -68,19 +68,16 @@ fi
 # Start QEMU without KVM
 qemu-system-x86_64 \
     -cpu qemu64 \
-    -smp 2 \
-    -m 4096 \
+    -smp 20 \
+    -m 60000 \
     -drive file="$DISK",format=raw,if=virtio \
     -drive file="$SEED",format=raw,if=virtio \
     -netdev user,id=net0,hostfwd=tcp::2222-:22 \
     -device virtio-net,netdev=net0 \
-    -vga virtio \
-    -vnc :0 \
-    -daemonize
+    -nographic \
+    -serial mon:stdio
 
 # Start noVNC on port 6080, forwarding to VNC :0 (port 5900)
-websockify --web=/novnc 6080 localhost:5900 &
-
 echo "================================================"
 echo " 🖥️  VNC: http://localhost:6080/vnc.html"
 echo " 🔐 SSH: ssh root@localhost -p 2222"
